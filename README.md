@@ -115,7 +115,8 @@ POST http://localhost:5001/api/auth/login
 }
 ```
 ### 📸 démonstration
-[Screen Recording 2024-11-23 at 17.04.58.zip](https://github.com/user-attachments/files/17880424/Screen.Recording.2024-11-23.at.17.04.58.zip)
+[Screen Recording 2024-11-24 at 09.19.17.zip](https://github.com/user-attachments/files/17892527/Screen.Recording.2024-11-24.at.09.19.17.zip)
+
 
 
 
