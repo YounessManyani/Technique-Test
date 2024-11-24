@@ -3,7 +3,7 @@ import axios from 'axios';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Table, TableBody, TableCell, TableHead, TableRow, Button, Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { io } from 'socket.io-client'; // Import du client Socket.IO
+import { io } from 'socket.io-client';
 
 // Thème personnalisé pour le bouton Delete
 const theme = createTheme({
@@ -16,11 +16,10 @@ const theme = createTheme({
 });
 
 const ProductList = () => {
-  const [products, setProducts] = useState([]); // État pour stocker la liste des produits
+  const [products, setProducts] = useState([]);
   const navigate = useNavigate();
-  const socket = io('http://localhost:5001'); // Connexion au serveur Socket.IO
+  const socket = io('http://localhost:5001');
 
-  // Charger les produits initiaux et configurer Socket.IO
   useEffect(() => {
     // Charger la liste initiale des produits
     axios
@@ -30,7 +29,7 @@ const ProductList = () => {
       .then((res) => setProducts(res.data))
       .catch((err) => console.log(err));
 
-    // Écouter les événements Socket.IO
+    // Écouter les événements Socket.IO pour synchroniser les données
     socket.on('productCreated', (newProduct) => {
       setProducts((prevProducts) => [...prevProducts, newProduct]);
     });
@@ -55,14 +54,13 @@ const ProductList = () => {
     };
   }, []);
 
-  // Gestion des actions utilisateur
   const handleLogout = () => {
-    localStorage.removeItem('token'); // Supprimer le token d'authentification
-    navigate('/login'); // Rediriger vers la page de connexion
+    localStorage.removeItem('token');
+    navigate('/login');
   };
 
   const handleEdit = (id) => {
-    navigate(`/edit/${id}`); // Naviguer vers la page d'édition
+    navigate(`/edit/${id}`);
   };
 
   const handleDelete = (id) => {
@@ -79,12 +77,12 @@ const ProductList = () => {
   };
 
   const handleCreate = () => {
-    navigate('/create'); // Naviguer vers la page de création
+    navigate('/create');
   };
 
   return (
     <Box>
-      {/* Boutons en haut pour créer et se déconnecter */}
+      {/* Section des boutons en haut */}
       <Box sx={{ display: 'flex', justifyContent: 'space-between', marginBottom: 2 }}>
         <Button variant="contained" color="primary" onClick={handleCreate}>
           Create New Product
@@ -111,25 +109,26 @@ const ProductList = () => {
               <TableCell>{product.type}</TableCell>
               <TableCell>{product.price}</TableCell>
               <TableCell>
-                {/* Bouton pour modifier */}
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => handleEdit(product._id)}
-                >
-                  Edit
-                </Button>
-
-                {/* Bouton pour supprimer avec thème personnalisé */}
-                <ThemeProvider theme={theme}>
+                <Box sx={{ display: 'flex', gap: '10px' }}>
+                  {/* Bouton Edit */}
                   <Button
                     variant="contained"
-                    color="red" // Couleur personnalisée définie dans le thème
-                    onClick={() => handleDelete(product._id)}
+                    color="primary"
+                    onClick={() => handleEdit(product._id)}
                   >
-                    Delete
+                    Edit
                   </Button>
-                </ThemeProvider>
+                  {/* Bouton Delete */}
+                  <ThemeProvider theme={theme}>
+                    <Button
+                      variant="contained"
+                      color="red"
+                      onClick={() => handleDelete(product._id)}
+                    >
+                      Delete
+                    </Button>
+                  </ThemeProvider>
+                </Box>
               </TableCell>
             </TableRow>
           ))}
